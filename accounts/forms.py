@@ -1,5 +1,6 @@
 from dataclasses import field
-from msilib.schema import Class
+# line 3 err: No module found
+# from msilib.schema import Class
 from django import forms
 from .models import Account
 
