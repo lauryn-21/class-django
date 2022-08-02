@@ -3,6 +3,7 @@ from django.shortcuts import render,get_object_or_404
 
 from category.models import Category
 from .models import Product
+from orders.models import orderproduct
 
 # Create your views here.
 
@@ -29,8 +30,19 @@ def product_detail(request, category_slug ,product_slug):
       single_product = Product.objects.get(category__slug=category_slug,slug=product_slug)
    except Exception as e:
       raise e
+
+   try:
+      orderproduct = OrderProduct.objects.filter(user=request.user, product_id=single_product.id).exists()
+   except OrderProduct.DoesNotExist:
+      orderproduct = None
+
+   
+   #get the reviews
+   reviews = ReviewRating.objects.filter(product_id=single_product.id, status=True)
+
        
    context={
           'single_product':single_product,
+          'reviews': reviews,
        }
    return render(request,'store/product_detail.html',context)
